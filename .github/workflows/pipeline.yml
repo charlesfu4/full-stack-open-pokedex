@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
@@ -40,7 +42,6 @@ jobs:
           healthcheck: 'https://pokedexcicd0917.herokuapp.com/health'
           checkstring: 'ok'
           rollbackonhealthcheckfailed: true
-      - uses: actions/checkout@v2
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.33.0
         env:
