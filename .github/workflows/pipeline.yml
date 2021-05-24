@@ -32,8 +32,14 @@ jobs:
           command: npm run test:e2e
           start: npm run start-prod
           wait-on: http://localhost:5000
+      - name: commit messages
+          env:
+            COMMIT_MESSAGES: ${{ contains(join(toJson(github.event.commits.*.message)), '#skip') }}
+            COMMIT_MESSAGES2: ${{ join(toJson(github.event.commits.*.message)) }}
+          run: echo "$COMMIT_MESSAGES"
+          run: echo "$COMMIT_MESSAGES2"
       - name: deploy heroku
-        if: ${{ github.event_name == 'push' && !contains(toJson(github.event.commits.*.message)[0], '#skip') }}
+        if: ${{ github.event_name == 'push' && !contains(join(toJson(github.event.commits.*.message)), '#skip') }}
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}} 
@@ -44,7 +50,7 @@ jobs:
           rollbackonhealthcheckfailed: true
       - uses: actions/checkout@v2
       - name: Bump version and push tag
-        if: ${{ github.event_name == 'push' && !contains(toJson(github.event.commits.*.message)[0], '#skip') }}
+        if: ${{ github.event_name == 'push' && !contains(join(toJson(github.event.commits.*.message)), '#skip') }}
         uses: anothrNick/github-tag-action@1.33.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
