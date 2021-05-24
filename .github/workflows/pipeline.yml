@@ -35,8 +35,10 @@ jobs:
       - name: commit messages
           env:
             COMMIT_MESSAGES: ${{ contains(join(toJson(github.event.commits.*.message)), '#skip') }}
-            COMMIT_MESSAGES2: ${{ join(toJson(github.event.commits.*.message)) }}
           run: echo "$COMMIT_MESSAGES"
+      - name: commit messages2
+          env:
+            COMMIT_MESSAGES2: ${{ join(toJson(github.event.commits.*.message)) }}
           run: echo "$COMMIT_MESSAGES2"
       - name: deploy heroku
         if: ${{ github.event_name == 'push' && !contains(join(toJson(github.event.commits.*.message)), '#skip') }}
