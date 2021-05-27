@@ -54,6 +54,7 @@ jobs:
       - name: indicate a success deployment 
         uses: 8398a7/action-slack@v3
         with:
+          job_name: deploy heroku
           status: custom 
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
           custom_payload: |
@@ -61,7 +62,7 @@ jobs:
               username: 'github-action',
               attachments: [{
                 color: 'good',
-                text: `A new version deployed to https://part11fso.herokuapp.com/ (${process.env.AS_COMMIT}) by ${process.env.AS_AUTHOR} build took ${process.env.AS_TOOK}`,
+                text: `A new version deployed to https://pokedexcicd0917.herokuapp.com/ (${process.env.AS_COMMIT}) by ${process.env.AS_AUTHOR} build took ${process.env.AS_TOOK}`,
               }]
             }
         env:
@@ -70,16 +71,9 @@ jobs:
       - name: indicate a failure build 
         uses: 8398a7/action-slack@v3
         with:
-          status: custom 
+          job_name: build
+          status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
-          custom_payload: |
-            {
-              username: 'github-action',
-              attachments: [{
-                color: 'warning',
-                text: `The build has failed`,
-              }]
-            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
         if: ${{ failure() }} # Pick up events even if the job fails or is canceled.
