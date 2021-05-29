@@ -54,7 +54,7 @@ jobs:
       - name: indicate a success deployment 
         uses: 8398a7/action-slack@v3
         with:
-          job_name: deploy heroku
+          # job_name: deploy heroku
           status: custom 
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
           custom_payload: |
@@ -67,13 +67,13 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-        if: ${{ github.event_name == 'push' && !contains(join(toJson(github.event.commits.*.message)), '#skip') && success() }} # Pick up events even if the job fails or is canceled.
+        if: ${{ github.event_name == 'push' && !contains(join(toJson(github.event.commits.*.message)), '#skip') && success() }}
       - name: indicate a failure build 
         uses: 8398a7/action-slack@v3
         with:
-          job_name: build
+          # job_name: build
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-        if: ${{ failure() }} # Pick up events even if the job fails or is canceled.
+        if: ${{ failure() }}
