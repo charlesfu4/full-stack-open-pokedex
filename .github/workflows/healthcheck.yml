@@ -1,9 +1,9 @@
 name: Periodic health check
 
 on:
-  push: 
-    branches:
-      - main
+  schedule:
+    - cron: '0 12 * * *'
+
 jobs:
   periodic_health_check:
     runs-on: ubuntu-18.04
